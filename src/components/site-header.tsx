@@ -5,12 +5,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 
 const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/studio", label: "Studio" },
-  { href: "/work", label: "Work" },
   { href: "/archive", label: "Archive" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
+  { href: "/studio", label: "Studio" },
+  { href: "/about", label: "Information" },
 ];
 
 const STATEMENT_PARTS = {
@@ -79,7 +76,7 @@ export function SiteHeader() {
     <header className="homeHeader">
       <div className="homeHeader__content">
         <h2>
-          <span style={{ fontWeight: 400 }}>{STATEMENT_PARTS.name}</span>
+          <span className="homeHeader__studioName" style={{ fontWeight: 400 }}>{STATEMENT_PARTS.name}</span>
           {STATEMENT_PARTS.line1}
           <br />
           {STATEMENT_PARTS.line2}
@@ -88,29 +85,17 @@ export function SiteHeader() {
         </h2>
       </div>
 
-      <div className="homeHeader__center" ref={dropdownRef}>
-        <button
-          onClick={() => setNavOpen(!navOpen)}
-          className="homeHeader__menuButton"
-        >
-          Menu
-        </button>
-
-        {navOpen && (
-          <nav className="homeHeader__dropdown" aria-label="Primary">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setNavOpen(false)}
-                className={isActive(link.href) ? "homeHeader__dropdownLink is-active" : "homeHeader__dropdownLink"}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-        )}
-      </div>
+      <nav className="homeHeader__center" aria-label="Primary">
+        {navLinks.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            className={isActive(link.href) ? "homeHeader__navLink is-active" : "homeHeader__navLink"}
+          >
+            {link.label}
+          </Link>
+        ))}
+      </nav>
 
       <div className="homeHeader__info">
         <div className="homeHeader__meta">
