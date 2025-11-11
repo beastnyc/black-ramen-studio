@@ -650,6 +650,26 @@ img {
   filter: grayscale(20%) brightness(0.6);
 }
 
+.dramatic-hero__video::-webkit-media-controls {
+  display: none !important;
+}
+
+.dramatic-hero__video::-webkit-media-controls-enclosure {
+  display: none !important;
+}
+
+.dramatic-hero__video::-webkit-media-controls-panel {
+  display: none !important;
+}
+
+.dramatic-hero__video::-webkit-media-controls-play-button {
+  display: none !important;
+}
+
+.dramatic-hero__video::-webkit-media-controls-start-playback-button {
+  display: none !important;
+}
+
 .dramatic-hero__overlay {
   position: absolute;
   inset: 0;

@@ -74,8 +74,12 @@ export function InstagramReelHero() {
           loop
           muted
           playsInline
+          controls={false}
+          disablePictureInPicture
+          disableRemotePlayback
           className="dramatic-hero__video"
           preload="auto"
+          style={{ pointerEvents: 'none' }}
         >
           <source src="/hero-video.mp4" type="video/mp4" />
         </video>
