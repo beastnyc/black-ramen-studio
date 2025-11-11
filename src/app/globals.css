@@ -163,7 +163,7 @@ img {
   mix-blend-mode: normal;
   color: #ffffff;
   background: rgba(26, 26, 26, 0.7);
-  padding: clamp(4px, 0.5vw, 6px) clamp(16px, 2vw, 24px);
+  padding: clamp(4px, 0.5vw, 6px) clamp(10px, 1.2vw, 14px);
   border-radius: 0;
 }
 
