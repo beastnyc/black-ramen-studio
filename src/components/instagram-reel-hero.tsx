@@ -11,23 +11,57 @@ export function InstagramReelHero() {
     const video = videoRef.current;
     if (!video) return;
 
+    // Explicitly set muted to true via JavaScript (required for autoplay)
+    video.muted = true;
+    video.playsInline = true;
+
     // Ensure the video plays when loaded
-    const playVideo = () => {
-      video.play().catch((error) => {
-        console.log("Video autoplay failed:", error);
-      });
+    const playVideo = async () => {
+      try {
+        await video.play();
+      } catch (error) {
+        console.log("Video autoplay blocked, will play on user interaction:", error);
+
+        // Fallback: play on any user interaction
+        const playOnInteraction = () => {
+          video.play().catch(() => {});
+          document.removeEventListener('click', playOnInteraction);
+          document.removeEventListener('touchstart', playOnInteraction);
+          document.removeEventListener('scroll', playOnInteraction);
+        };
+
+        document.addEventListener('click', playOnInteraction, { once: true });
+        document.addEventListener('touchstart', playOnInteraction, { once: true });
+        document.addEventListener('scroll', playOnInteraction, { once: true });
+      }
     };
 
-    // Try to play immediately
+    // Try multiple times with different events
     playVideo();
 
-    // Also try to play when metadata is loaded
-    video.addEventListener('loadedmetadata', playVideo);
-    video.addEventListener('canplay', playVideo);
+    const handleCanPlay = () => playVideo();
+    const handleLoadedData = () => playVideo();
+    const handleLoadedMetadata = () => playVideo();
+
+    video.addEventListener('loadeddata', handleLoadedData);
+    video.addEventListener('loadedmetadata', handleLoadedMetadata);
+    video.addEventListener('canplay', handleCanPlay);
+    video.addEventListener('canplaythrough', handleCanPlay);
+
+    // Handle visibility change (play when tab becomes visible)
+    const handleVisibilityChange = () => {
+      if (!document.hidden && video.paused) {
+        playVideo();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
-      video.removeEventListener('loadedmetadata', playVideo);
-      video.removeEventListener('canplay', playVideo);
+      video.removeEventListener('loadeddata', handleLoadedData);
+      video.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      video.removeEventListener('canplay', handleCanPlay);
+      video.removeEventListener('canplaythrough', handleCanPlay);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
 
