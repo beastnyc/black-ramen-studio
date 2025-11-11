@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 
 const navLinks = [
+  { href: "/", label: "[ BLACK RAMEN ]" },
   { href: "/archive", label: "Archive" },
   { href: "/studio", label: "Studio" },
   { href: "/about", label: "Information" },
