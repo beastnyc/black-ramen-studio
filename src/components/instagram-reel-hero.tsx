@@ -11,56 +11,65 @@ export function InstagramReelHero() {
     const video = videoRef.current;
     if (!video) return;
 
-    // Explicitly set muted to true via JavaScript (required for autoplay)
+    // Force video properties
     video.muted = true;
     video.playsInline = true;
+    video.defaultMuted = true;
 
-    // Ensure the video plays when loaded
-    const playVideo = async () => {
+    // Attempt to play the video
+    const attemptPlay = async () => {
       try {
-        await video.play();
+        // Small delay to ensure video is ready
+        await new Promise(resolve => setTimeout(resolve, 100));
+        const playPromise = video.play();
+
+        if (playPromise !== undefined) {
+          await playPromise;
+          console.log("Video autoplay successful");
+        }
       } catch (error) {
-        console.log("Video autoplay blocked, will play on user interaction:", error);
+        console.log("Video autoplay blocked:", error);
 
         // Fallback: play on any user interaction
-        const playOnInteraction = () => {
-          video.play().catch(() => {});
-          document.removeEventListener('click', playOnInteraction);
-          document.removeEventListener('touchstart', playOnInteraction);
-          document.removeEventListener('scroll', playOnInteraction);
+        const playOnInteraction = async () => {
+          try {
+            await video.play();
+            console.log("Video started on user interaction");
+          } catch (e) {
+            console.log("Failed to play on interaction:", e);
+          }
         };
 
-        document.addEventListener('click', playOnInteraction, { once: true });
-        document.addEventListener('touchstart', playOnInteraction, { once: true });
-        document.addEventListener('scroll', playOnInteraction, { once: true });
+        // Add interaction listeners
+        const events = ['click', 'touchstart', 'scroll', 'mousemove', 'keydown'];
+        events.forEach(event => {
+          document.addEventListener(event, playOnInteraction, { once: true });
+        });
       }
     };
 
-    // Try multiple times with different events
-    playVideo();
+    // Try to play immediately
+    attemptPlay();
 
-    const handleCanPlay = () => playVideo();
-    const handleLoadedData = () => playVideo();
-    const handleLoadedMetadata = () => playVideo();
+    // Also try when video is ready
+    const handleCanPlayThrough = () => {
+      if (video.paused) {
+        attemptPlay();
+      }
+    };
 
-    video.addEventListener('loadeddata', handleLoadedData);
-    video.addEventListener('loadedmetadata', handleLoadedMetadata);
-    video.addEventListener('canplay', handleCanPlay);
-    video.addEventListener('canplaythrough', handleCanPlay);
+    video.addEventListener('canplaythrough', handleCanPlayThrough);
 
-    // Handle visibility change (play when tab becomes visible)
+    // Handle visibility change
     const handleVisibilityChange = () => {
       if (!document.hidden && video.paused) {
-        playVideo();
+        attemptPlay();
       }
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
-      video.removeEventListener('loadeddata', handleLoadedData);
-      video.removeEventListener('loadedmetadata', handleLoadedMetadata);
-      video.removeEventListener('canplay', handleCanPlay);
-      video.removeEventListener('canplaythrough', handleCanPlay);
+      video.removeEventListener('canplaythrough', handleCanPlayThrough);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
