@@ -1230,3 +1230,128 @@ img {
     gap: clamp(4px, 1vw, 8px);
   }
 }
+
+/* Archive Grid - Sarah Bassett Style */
+
+body:has(#archive) .homeHeader * {
+  color: #000000 !important;
+  mix-blend-mode: normal !important;
+}
+
+body:has(#archive) .homeHeader__navLink {
+  background: rgba(240, 240, 240, 0.8) !important;
+  color: #000000 !important;
+}
+
+.archive-projects-section {
+  position: relative;
+  min-height: 100vh;
+  padding: clamp(48px, 8vw, 96px) clamp(12px, 2vw, 24px);
+  background: #ffffff;
+}
+
+.archive-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: clamp(16px, 2vw, 32px);
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* Archive Project Card */
+
+.archive-project-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(6px, 0.8vw, 8px);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.archive-project-card:hover {
+  transform: translateY(-8px);
+}
+
+.archive-project-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 264 / 352;
+  overflow: hidden;
+  background: var(--bg-secondary);
+  border-radius: 0;
+}
+
+.archive-project-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.archive-project-card:hover .archive-project-image img {
+  opacity: 0.85;
+  transform: scale(1.02);
+}
+
+/* Archive Project Info */
+
+.archive-project-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.archive-project-title {
+  font-family: var(--font-ibm-plex-mono), "Courier New", monospace;
+  font-size: clamp(0.9rem, 1vw, 1.1rem);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  color: #000000;
+  margin: 0;
+}
+
+.archive-project-count {
+  font-family: var(--font-ibm-plex-mono), "Courier New", monospace !important;
+  font-size: clamp(0.9rem, 1vw, 1.1rem) !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+  letter-spacing: -0.01em !important;
+  text-transform: uppercase !important;
+  color: #666666;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Responsive Grid */
+
+@media (max-width: 1400px) {
+  .archive-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .archive-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .archive-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(12px, 3vw, 20px);
+  }
+
+  .archive-projects-section {
+    padding: clamp(32px, 6vw, 64px) clamp(16px, 3vw, 32px);
+  }
+}
+
+@media (max-width: 480px) {
+  .archive-grid {
+    grid-template-columns: 1fr;
+  }
+}
